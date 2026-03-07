@@ -1,0 +1,31 @@
+when:
+  event: cron
+  cron: update
+
+steps:
+  - name: fetch
+    image: alpine/git
+    environment:
+      MIMI_TOKEN:
+        from_secret: MIMI_TOKEN
+    commands:
+      - git config --global user.name "mimi"
+      - git config --global user.email "mimi@koi.rip"
+      - git remote set-url origin "https://${CI_REPO_OWNER}:$${MIMI_TOKEN}@codeberg.org/${CI_REPO}.git"
+      - git fetch -u "https://github.com/catppuccin/gitea.git" main:catppuccin
+      - git push -u origin catppuccin --force
+  - name: open pull request
+    image: woodpeckercommunity/gitea-pull-request-create-plugin
+    depends_on: [fetch]
+    settings:
+      gitea_address: https://codeberg.org
+      gitea_token:
+        from_secret: MIMI_TOKEN
+      owner: ${CI_REPO_OWNER}
+      repo: ${CI_REPO_NAME}
+      base_branch: ${CI_REPO_DEFAULT_BRANCH}
+      branch: catppuccin
+      pr_title: "merge with catppuccin"
+      pr_body: "[beep boop](${CI_PIPELINE_URL}) :3 **USE MERGE COMMIT !!!**"
+      skip_on_empty_branch: true
+      delete_branch_after_merge: true
