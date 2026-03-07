@@ -1,6 +1,7 @@
 {
   "imports": {
-    "@catppuccin/palette": "npm:@catppuccin/palette@^1.7.1",
+    "@everviolet/palette": "npm:@everviolet/palette@^0.1.1",
+    "palette.json": "https://git.koi.rip/evergarden/palette/raw/palette.json",
     "@std/path": "jsr:@std/path@^1.0.8",
     "sass": "npm:sass@1.86.3",
     "@catppuccin/deno-lib": "https://deno.land/x/catppuccin_toolbox@deno-lib-v1.1.0/deno-lib/mod.ts"
