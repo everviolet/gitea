@@ -1,0 +1,25 @@
+when:
+  - event: [push, manual]
+    branch: main
+steps:
+  - name: build
+    image: denoland/deno:alpine
+    commands:
+      - deno install --allow-import
+      - deno run build
+  - name: prepare and deploy
+    image: alpine:latest
+    depends_on: [build]
+    environment:
+      EBIL_CLUB_KEY:
+        from_secret: EBIL_CLUB_KEY
+      EBIL_CLUB_HOST:
+        from_secret: EBIL_CLUB_HOST
+    commands:
+      - apk add --no-cache util-linux openssh rsync
+      - mkdir -p ~/.ssh
+      - chmod 700 ~/.ssh
+      - echo "$${EBIL_CLUB_KEY}" > ~/.ssh/deploy_key
+      - printf 'Host ebil.club\n\tHostName %s\n\tIdentityFile ~/.ssh/deploy_key\n\tUser %s\n\tStrictHostKeyChecking=no\n' "$${EBIL_CLUB_HOST}" 'evergarden' > ~/.ssh/config
+      - chmod 600 ~/.ssh/*
+      - rsync -rltzq --delete --chmod=D755,F644 dist/ ebil.club:gitea/
