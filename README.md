@@ -40,7 +40,25 @@
 
 ### Usage
 
-Refer to [catppuccin's usage section](https://github.com/catppuccin/gitea?tab=readme-ov-file#usage) for instructions.
+Download the latest builds from:
+```text
+https://evergarden.moe/gitea/theme-evergarden-[variant]-[accent].css
+```
+
+Refer to [catppuccin's usage section](https://github.com/catppuccin/gitea?tab=readme-ov-file#usage) for more instructions.
+
+### Building from source
+
+1. Install dependencies
+   ```bash
+   deno install
+   ```
+2. Patch and build
+   ```bash
+   deno run build
+   ```
+3. Files in `src/` are going to be patched with Evergarden colors
+4. You can find the output in `dist/`
 
 ### Thanks to <3
 
